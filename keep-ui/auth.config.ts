@@ -297,11 +297,9 @@ if (isDebug) {
 
 // Optional "Sign in with Keycloak" button next to the DB username/password form.
 // Keycloak users get the read-only role (see jwt callback and DbAuthVerifier).
-export const keycloakSignInEnabled =
-  authType === AuthType.DB &&
-  !!runtimeEnv("KEYCLOAK_ID") &&
-  !!runtimeEnv("KEYCLOAK_SECRET") &&
-  !!runtimeEnv("KEYCLOAK_ISSUER");
+// Always shown with DB auth; KEYCLOAK_ID, KEYCLOAK_SECRET and KEYCLOAK_ISSUER must be
+// set for the sign-in itself to work.
+export const keycloakSignInEnabled = authType === AuthType.DB;
 
 export const config = {
   debug: isDebug,
