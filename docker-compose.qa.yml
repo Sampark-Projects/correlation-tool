@@ -44,6 +44,12 @@ services:
       - PUSHER_HOST=keep-websocket-server
       - PUSHER_PORT=6001
       - USE_NGROK=false
+      # ITSM tickets for new alerts; stays off when the login is not set in .env.qa
+      - ITSM_LOGIN_EMAIL=${ITSM_LOGIN_EMAIL:-}
+      - ITSM_LOGIN_PASSWORD=${ITSM_LOGIN_PASSWORD:-}
+      - ITSM_TICKET_EMAIL=${ITSM_TICKET_EMAIL:-}
+      - ITSM_TICKET_MOBILE=${ITSM_TICKET_MOBILE:-}
+      - ITSM_SEVERITY_MAP=${ITSM_SEVERITY_MAP:-}
     volumes:
       - sampark-state:/state
 

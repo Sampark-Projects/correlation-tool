@@ -48,6 +48,7 @@ from keep.api.models.db.incident import IncidentStatus
 from keep.api.models.incident import IncidentDto
 from keep.api.tasks.notification_cache import get_notification_cache
 from keep.api.utils.alert_utils import sanitize_alert
+from keep.api.utils.itsm_utils import create_itsm_tickets
 from keep.api.utils.enrichment_helpers import (
     calculate_firing_time_since_last_resolved,
     calculated_firing_counter,
@@ -456,6 +457,10 @@ def __handle_formatted_events(
             provider_id,
             timestamp_forced,
         )
+
+    with tracer.start_as_current_span("process_event_create_itsm_tickets"):
+        # open ITSM tickets for the new alerts (sent in the background, never raises)
+        create_itsm_tickets(tenant_id, enriched_formatted_events)
 
     # let's save all fields to the DB so that we can use them in the future such in deduplication fields suggestions
     # todo: also use it on correlation rules suggestions
