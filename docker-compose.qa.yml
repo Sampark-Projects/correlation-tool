@@ -1,0 +1,88 @@
+# Sampark QA deployment (DB login + "Sign in with Keycloak").
+#
+#   cp .env.qa.example .env.qa      # then fill in the values
+#   docker compose --env-file .env.qa -f docker-compose.qa.yml up -d --build
+#
+# Everything is served on ONE public domain through a reverse proxy on the host:
+#   /           -> 127.0.0.1:3000  (UI; the UI proxies /backend/* to the API itself)
+#   /websocket  -> 127.0.0.1:6001  (Soketi, strip the /websocket prefix)
+# The API is not published; only the UI container talks to it.
+
+services:
+  state-init:
+    # the API runs as uid 1000 and needs a writable /state (sqlite db + secrets)
+    image: busybox:1.36
+    command: chown -R 1000:1000 /state
+    volumes:
+      - sampark-state:/state
+    restart: "no"
+
+  keep-backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    image: ${API_IMAGE:-sampark-api:qa}
+    restart: unless-stopped
+    depends_on:
+      state-init:
+        condition: service_completed_successfully
+    environment:
+      - PORT=8080
+      - AUTH_TYPE=DB
+      - KEEP_JWT_SECRET=${KEEP_JWT_SECRET:?set KEEP_JWT_SECRET in .env.qa}
+      - KEEP_DEFAULT_USERNAME=${KEEP_DEFAULT_USERNAME:?set KEEP_DEFAULT_USERNAME in .env.qa}
+      - KEEP_DEFAULT_PASSWORD=${KEEP_DEFAULT_PASSWORD:?set KEEP_DEFAULT_PASSWORD in .env.qa}
+      # Keycloak tokens are verified against the realm's public keys (no secret needed here)
+      - KEYCLOAK_ISSUER=${KEYCLOAK_ISSUER:?set KEYCLOAK_ISSUER in .env.qa}
+      - KEYCLOAK_ID=${KEYCLOAK_ID:?set KEYCLOAK_ID in .env.qa}
+      - SECRET_MANAGER_TYPE=FILE
+      - SECRET_MANAGER_DIRECTORY=/state
+      - DATABASE_CONNECTION_STRING=${DATABASE_CONNECTION_STRING:-sqlite:////state/db.sqlite3?check_same_thread=False}
+      - PUSHER_APP_ID=1
+      - PUSHER_APP_KEY=${PUSHER_APP_KEY:-keepappkey}
+      - PUSHER_APP_SECRET=${PUSHER_APP_SECRET:?set PUSHER_APP_SECRET in .env.qa}
+      - PUSHER_HOST=keep-websocket-server
+      - PUSHER_PORT=6001
+      - USE_NGROK=false
+    volumes:
+      - sampark-state:/state
+
+  keep-frontend:
+    build:
+      context: ./keep-ui
+      dockerfile: ../docker/Dockerfile.ui
+    image: ${UI_IMAGE:-sampark-ui:qa}
+    restart: unless-stopped
+    depends_on:
+      - keep-backend
+    ports:
+      - "127.0.0.1:${UI_PORT:-3000}:3000"
+    environment:
+      - AUTH_TYPE=DB
+      # public URL users type in the browser, e.g. https://correlate-qa.samparkme.com (no trailing slash)
+      - NEXTAUTH_URL=${PUBLIC_URL:?set PUBLIC_URL in .env.qa}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:?set NEXTAUTH_SECRET in .env.qa}
+      # internal address of the API; the browser reaches it through the UI's /backend path
+      - API_URL=http://keep-backend:8080
+      - KEYCLOAK_ID=${KEYCLOAK_ID:?set KEYCLOAK_ID in .env.qa}
+      - KEYCLOAK_SECRET=${KEYCLOAK_SECRET:?set KEYCLOAK_SECRET in .env.qa}
+      - KEYCLOAK_ISSUER=${KEYCLOAK_ISSUER:?set KEYCLOAK_ISSUER in .env.qa}
+      # a path starting with "/" makes the browser use the same domain (wss://<domain>/websocket)
+      - PUSHER_HOST=${PUSHER_HOST:-/websocket}
+      - PUSHER_PORT=${PUSHER_PORT:-443}
+      - PUSHER_APP_KEY=${PUSHER_APP_KEY:-keepappkey}
+      - POSTHOG_DISABLED=true
+
+  keep-websocket-server:
+    image: quay.io/soketi/soketi:1.4-16-debian
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${WEBSOCKET_PORT:-6001}:6001"
+    environment:
+      - SOKETI_USER_AUTHENTICATION_TIMEOUT=3000
+      - SOKETI_DEFAULT_APP_ID=1
+      - SOKETI_DEFAULT_APP_KEY=${PUSHER_APP_KEY:-keepappkey}
+      - SOKETI_DEFAULT_APP_SECRET=${PUSHER_APP_SECRET:?set PUSHER_APP_SECRET in .env.qa}
+
+volumes:
+  sampark-state:
