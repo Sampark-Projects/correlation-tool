@@ -21,27 +21,27 @@ import { FormattedContent } from "@/shared/ui/FormattedContent/FormattedContent"
 
 const severityColors = {
   critical: "bg-red-300",
-  high: "bg-orange-300",
+  high: "bg-[#fdba74]",
   warning: "bg-blue-200",
   low: "bg-green-300",
   info: "bg-green-300",
-  error: "bg-orange-300",
+  error: "bg-[#fdba74]",
 };
 
 const dotColors = {
   "bg-red-300": "bg-red-500",
-  "bg-orange-300": "bg-orange-500",
+  "bg-[#fdba74]": "bg-[#f97316]",
   "bg-blue-200": "bg-blue-400",
   "bg-green-300": "bg-green-500",
 };
 
 const severityTextColors = {
   critical: "text-red-500",
-  high: "text-orange-500",
+  high: "text-[#f97316]",
   warning: "text-yellow-500",
   low: "text-green-500",
   info: "text-emerald-500",
-  error: "text-orange-500",
+  error: "text-[#f97316]",
 };
 
 interface EventDotProps {

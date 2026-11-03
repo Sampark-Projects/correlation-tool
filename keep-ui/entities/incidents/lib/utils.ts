@@ -28,7 +28,7 @@ export function getIncidentSeverityIconAndColor(
       break;
     case "high":
       icon = ExclamationTriangleIcon;
-      color = "orange";
+      color = "#f97316";
       break;
     case "warning":
       color = "yellow";

@@ -344,7 +344,7 @@ export const Search = ({ session }: SearchProps) => {
                   className="focus:outline-none flex items-center"
                   disabled={isLoading}
                 >
-                  <Image className="w-8" src={KeepPng} alt="Keep Logo" />
+                  <Image className="w-8" src={KeepPng} alt="Sampark Logo" />
                   {tenantLogoUrl && (
                     <Image
                       src={tenantLogoUrl || ""}
@@ -384,7 +384,7 @@ export const Search = ({ session }: SearchProps) => {
           </Popover>
         ) : (
           <Link href="/" className="flex items-center">
-            <Image className="w-8" src={KeepPng} alt="Keep Logo" />
+            <Image className="w-8" src={KeepPng} alt="Sampark Logo" />
             {hasTenantLogo && (
               <Image
                 src={tenantLogoUrl || ""}

@@ -115,7 +115,7 @@ export default function ApiKeySettings({ selectedTab }: Props) {
             disabled={!createApiKeyEnabled}
             tooltip={
               !createApiKeyEnabled
-                ? "API Key creation is disabled because Keep is running in NO_AUTH mode."
+                ? "API Key creation is disabled because Sampark is running in NO_AUTH mode."
                 : "Add user"
             }
           >

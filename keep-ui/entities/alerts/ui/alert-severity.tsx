@@ -23,12 +23,12 @@ export function AlertSeverity({ severity }: Props) {
       break;
     case "high":
       icon = ExclamationCircleIcon;
-      color = "orange";
+      color = "#f97316";
       severityText = Severity.High.toString();
       break;
     case "error":
       icon = ExclamationTriangleIcon;
-      color = "orange";
+      color = "#f97316";
       severityText = Severity.High.toString();
       break;
     case "warning":

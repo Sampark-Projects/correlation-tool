@@ -131,7 +131,7 @@ export default function UsersSettings({
             disabled={!userCreationAllowed}
             title={
               !userCreationAllowed
-                ? "Users are managed externally and cannot be created from Keep"
+                ? "Users are managed externally and cannot be created from Sampark"
                 : undefined
             }
           >

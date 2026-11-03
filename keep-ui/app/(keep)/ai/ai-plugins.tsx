@@ -112,7 +112,7 @@ export function AIPlugins() {
                     <Title>No AI enabled for this tenant</Title>
                     <p className="pt-2">
                       AI plugins can correlate, enrich, or summarize your alerts
-                      and incidents by leveraging the the context within Keep
+                      and incidents by leveraging the the context within Sampark
                       allowing you to gain deeper insights and respond more
                       effectively.
                     </p>

@@ -88,7 +88,7 @@ const ProvidersTiles = ({
           <div className="relative">
             <Tooltip
               content={
-                <>Providers that send alerts to Keep and are not installed.</>
+                <>Providers that send alerts to Sampark and are not installed.</>
               }
             >
               <QuestionMarkCircleIcon className="w-4 h-4" />

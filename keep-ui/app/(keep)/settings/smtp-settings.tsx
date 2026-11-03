@@ -396,7 +396,7 @@ export default function SMTPSettingsForm({ selectedTab }: Props) {
             error={!!errors.to_email}
           />
           <label className="block text-sm font-medium mb-1 text-gray-500">
-            A test mail address. Keep will try to send email to this address.
+            A test mail address. Sampark will try to send email to this address.
           </label>
           {errors.to_email && (
             <p className="mt-1 text-sm text-red-500">{errors.to_email}</p>

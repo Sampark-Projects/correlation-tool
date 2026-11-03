@@ -25,7 +25,7 @@ export const useFetchProviders = () => {
   const toastShownKey = "localhostToastShown";
   const ToastMessage = () => (
     <div>
-      Webhooks are disabled because Keep is not accessible from the internet.
+      Webhooks are disabled because Sampark is not accessible from the internet.
       <br />
       <Link
         href={`${

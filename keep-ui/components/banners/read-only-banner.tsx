@@ -5,7 +5,7 @@ import KeepBanner from "@/components/banners/BannerBase";
 const ReadOnlyBanner = () => {
   return <KeepBanner
     bannerId="read-only-banner"
-    text="Keep is in read-only mode."
+    text="Sampark is in read-only mode."
     newWindow={true}
   />
 };

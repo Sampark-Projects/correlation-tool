@@ -12,7 +12,7 @@ export default async function Page({ params }: PageProps) {
 export async function generateMetadata({ params }: PageProps) {
   const { fp } = await params;
   return {
-    title: `Keep - Alert ${fp}`,
+    title: `Sampark - Alert ${fp}`,
     description: "View alert details",
   };
 }

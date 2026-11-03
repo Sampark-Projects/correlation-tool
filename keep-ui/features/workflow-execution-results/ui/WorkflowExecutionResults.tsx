@@ -100,7 +100,7 @@ export function WorkflowExecutionResults({
       isWorkflowExecution(executionData) && executionData.workflow_name
         ? executionData.workflow_name
         : "Workflow";
-    document.title = `${workflowName} - Workflow Results - Keep`;
+    document.title = `${workflowName} - Workflow Results - Sampark`;
     if (status) {
       setFavicon(convertWorkflowStatusToFaviconStatus(status));
     }

@@ -456,7 +456,7 @@ const DeduplicationSidebar: React.FC<DeduplicationSidebarProps> = ({
                           className="w-[1em] h-[1em] text-gray-500"
                         />
                         <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 p-2 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-80 text-center pointer-events-none group-hover:pointer-events-auto">
-                          1. Full deduplication: Keep will discard events if
+                          1. Full deduplication: Sampark will discard events if
                           they are the same (excluding the &apos;Ignore
                           Fields&apos;).
                           <br />

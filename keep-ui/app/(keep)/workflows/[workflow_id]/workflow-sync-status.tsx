@@ -52,7 +52,7 @@ export function WorkflowSyncStatus({
   };
 
   return (
-    <Tooltip content={isChangesSaved ? "Saved to Keep" : "Not saved"}>
+    <Tooltip content={isChangesSaved ? "Saved to Sampark" : "Not saved"}>
       <span className="flex items-center gap-1 text-sm">
         {isChangesSaved ? (
           <>
@@ -65,7 +65,7 @@ export function WorkflowSyncStatus({
               {lastSavedAt ? (
                 <TimeAgo date={lastSavedAt} formatter={customFormatter} />
               ) : (
-                "to Keep"
+                "to Sampark"
               )}
             </span>
           </>

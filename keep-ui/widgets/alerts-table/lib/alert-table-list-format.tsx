@@ -136,7 +136,7 @@ export const formatList = (
             let color = "blue";
             if (typeof item === "object" && item !== null) {
               if (item.severity === "Critical") color = "red";
-              else if (item.severity === "Excessive") color = "orange";
+              else if (item.severity === "Excessive") color = "amber";
             }
 
             return (
@@ -212,7 +212,7 @@ export const formatList = (
       let color = "blue";
       if (typeof firstItem === "object" && firstItem !== null) {
         if (firstItem.severity === "Critical") color = "red";
-        else if (firstItem.severity === "Excessive") color = "orange";
+        else if (firstItem.severity === "Excessive") color = "amber";
       }
 
       return (
@@ -238,7 +238,7 @@ export const formatList = (
             let color = "blue";
             if (typeof item === "object" && item !== null) {
               if (item.severity === "Critical") color = "red";
-              else if (item.severity === "Excessive") color = "orange";
+              else if (item.severity === "Excessive") color = "amber";
             }
 
             return (

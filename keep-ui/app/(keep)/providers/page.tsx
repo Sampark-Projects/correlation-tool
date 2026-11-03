@@ -8,6 +8,6 @@ export default async function Page(props: {
 }
 
 export const metadata = {
-  title: "Keep - Providers",
-  description: "Connect providers to Keep to make your alerts better.",
+  title: "Sampark - Providers",
+  description: "Connect providers to Sampark to make your alerts better.",
 };

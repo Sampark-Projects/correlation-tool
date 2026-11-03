@@ -141,7 +141,7 @@ export const CreateIncidentWithAIModal = ({
       if (error instanceof KeepApiError) {
         if (error.statusCode === 400) {
           setError(
-            "Keep backend is not initialized with an AI model. See documentation on how to enable it."
+            "Sampark backend is not initialized with an AI model. See documentation on how to enable it."
           );
         } else {
           setError(
@@ -405,7 +405,7 @@ export const CreateIncidentWithAIModal = ({
                   color="orange"
                   className="w-full mb-4"
                 >
-                  You have selected {alerts.length} alerts. Keep currently
+                  You have selected {alerts.length} alerts. Sampark currently
                   supports only 50 alerts at a time. Only the first 50 alerts
                   will be processed.
                 </Callout>

@@ -23,13 +23,29 @@ module.exports = {
         "screen-minus-200": "calc(100vh - 200px)",
       },
       colors: {
+        // Brand palette: Sampark green (#1d6838 is the main color, shade 500).
+        // The UI (and Tremor's color="orange") reference this palette under the
+        // "orange" name, so redefining it here re-themes the whole app.
+        orange: {
+          50: "#f1f9f4",
+          100: "#def2e6",
+          200: "#bde5cc",
+          300: "#89d2a5",
+          400: "#3bb068",
+          500: "#1d6838",
+          600: "#1a5b33",
+          700: "#154c2a",
+          800: "#113c21",
+          900: "#0c2c18",
+          950: "#081c10",
+        },
         // light mode
         tremor: {
           brand: {
-            faint: "rgb(255 247 237)", // orange-50
-            muted: "rgb(255 237 213)", // orange-200
-            subtle: "rgb(251 146 60)", // orange-400
-            DEFAULT: "rgb(249 115 22)", // orange-500
+            faint: "#f1f9f4", // orange-50
+            muted: "#def2e6", // orange-100
+            subtle: "#3bb068", // orange-400
+            DEFAULT: "#1d6838", // orange-500 (main brand color)
             emphasis: "#374151", //  gray-700
             inverted: "#ffffff", // white
           },
@@ -56,11 +72,11 @@ module.exports = {
         // dark mode
         "dark-tremor": {
           brand: {
-            faint: "#0B1229", // custom
-            muted: "#172554", // blue-950
-            subtle: "#1e40af", // blue-800
-            DEFAULT: "#3b82f6", // blue-500
-            emphasis: "#60a5fa", // blue-400
+            faint: "#081c10", // orange-950
+            muted: "#0c2c18", // orange-900
+            subtle: "#154c2a", // orange-700
+            DEFAULT: "#3bb068", // orange-400
+            emphasis: "#89d2a5", // orange-300
             inverted: "#030712", // gray-950
           },
           background: {

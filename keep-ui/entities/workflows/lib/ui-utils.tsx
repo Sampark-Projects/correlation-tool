@@ -11,7 +11,7 @@ const KeepIncidentIcon = () => (
     className="tremor-Badge-icon shrink-0 -ml-1 mr-1.5"
     width={16}
     height={16}
-    alt="Keep Incident"
+    alt="Sampark Incident"
   />
 );
 const KeepAlertIcon = () => (
@@ -20,7 +20,7 @@ const KeepAlertIcon = () => (
     className="tremor-Badge-icon shrink-0 -ml-1 mr-1.5"
     width={16}
     height={16}
-    alt="Keep Alert"
+    alt="Sampark Alert"
   />
 );
 

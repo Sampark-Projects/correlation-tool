@@ -154,7 +154,7 @@ export const UploadWorkflowsModal: React.FC<UploadWorkflowsModalProps> = ({
           </Button>
         </div>
         <div className="mt-4 text-sm">
-          <h3>Or just try some from Keep examples:</h3>
+          <h3>Or just try some from Sampark examples:</h3>
           <Button
             className="mt-2"
             color="orange"

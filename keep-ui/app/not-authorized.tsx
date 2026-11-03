@@ -26,7 +26,7 @@ export default function NotAuthorized({ message }: { message?: string }) {
           </Link>
         </Subtitle>
       </div>
-      <Image src="/keep.svg" alt="Keep" width={150} height={150} />
+      <Image src="/keep.svg" alt="Sampark" width={150} height={150} />
       <Button
         onClick={() => {
           router.back();

@@ -48,7 +48,7 @@ export const AlertTimeline: React.FC<AlertTimelineProps> = ({
       {entry.user_id.toLowerCase() === "system" ? (
         <DynamicImageProviderIcon
           src="/icons/keep-icon.png"
-          alt="Keep Logo"
+          alt="Sampark Logo"
           width={40}
           height={40}
           providerType="keep"

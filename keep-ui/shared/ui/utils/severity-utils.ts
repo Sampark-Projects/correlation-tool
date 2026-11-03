@@ -14,7 +14,7 @@ export const getSeverityBgClassName = (severity?: UISeverity) => {
       return "bg-red-500";
     case "high":
     case "error":
-      return "bg-orange-500";
+      return "bg-[#f97316]";
     case "warning":
       return "bg-yellow-500";
     case "info":
@@ -30,7 +30,7 @@ export const getSeverityLabelClassName = (severity?: UISeverity) => {
       return "bg-red-100";
     case "high":
     case "error":
-      return "bg-orange-100";
+      return "bg-[#ffedd5]";
     case "warning":
       return "bg-yellow-100";
     case "info":
@@ -46,7 +46,7 @@ export const getSeverityTextClassName = (severity?: UISeverity) => {
       return "text-red-500";
     case "high":
     case "error":
-      return "text-orange-500";
+      return "text-[#f97316]";
     case "warning":
       return "text-amber-900";
     case "info":

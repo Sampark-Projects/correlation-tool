@@ -11,12 +11,12 @@ describe('severity-utils', () => {
       expect(getSeverityBgClassName(UISeverity.Critical)).toBe('bg-red-500');
     });
 
-    it('should return "bg-orange-500" for high severity', () => {
-      expect(getSeverityBgClassName(UISeverity.High)).toBe('bg-orange-500');
+    it('should return "bg-[#f97316]" for high severity', () => {
+      expect(getSeverityBgClassName(UISeverity.High)).toBe('bg-[#f97316]');
     });
 
-    it('should return "bg-orange-500" for error severity', () => {
-      expect(getSeverityBgClassName(UISeverity.Error)).toBe('bg-orange-500');
+    it('should return "bg-[#f97316]" for error severity', () => {
+      expect(getSeverityBgClassName(UISeverity.Error)).toBe('bg-[#f97316]');
     });
 
     it('should return "bg-yellow-500" for warning severity', () => {
@@ -42,12 +42,12 @@ describe('severity-utils', () => {
       expect(getSeverityLabelClassName(UISeverity.Critical)).toBe('bg-red-100');
     });
 
-    it('should return "bg-orange-100" for high severity', () => {
-      expect(getSeverityLabelClassName(UISeverity.High)).toBe('bg-orange-100');
+    it('should return "bg-[#ffedd5]" for high severity', () => {
+      expect(getSeverityLabelClassName(UISeverity.High)).toBe('bg-[#ffedd5]');
     });
 
-    it('should return "bg-orange-100" for error severity', () => {
-      expect(getSeverityLabelClassName(UISeverity.Error)).toBe('bg-orange-100');
+    it('should return "bg-[#ffedd5]" for error severity', () => {
+      expect(getSeverityLabelClassName(UISeverity.Error)).toBe('bg-[#ffedd5]');
     });
 
     it('should return "bg-yellow-100" for warning severity', () => {
@@ -73,12 +73,12 @@ describe('severity-utils', () => {
       expect(getSeverityTextClassName(UISeverity.Critical)).toBe('text-red-500');
     });
 
-    it('should return "text-orange-500" for high severity', () => {
-      expect(getSeverityTextClassName(UISeverity.High)).toBe('text-orange-500');
+    it('should return "text-[#f97316]" for high severity', () => {
+      expect(getSeverityTextClassName(UISeverity.High)).toBe('text-[#f97316]');
     });
 
-    it('should return "text-orange-500" for error severity', () => {
-      expect(getSeverityTextClassName(UISeverity.Error)).toBe('text-orange-500');
+    it('should return "text-[#f97316]" for error severity', () => {
+      expect(getSeverityTextClassName(UISeverity.Error)).toBe('text-[#f97316]');
     });
 
     it('should return "text-amber-900" for warning severity', () => {

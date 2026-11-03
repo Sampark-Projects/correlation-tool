@@ -148,7 +148,7 @@ export const alertSidebarFieldsConfig: Record<
             content={
               <>
                 Fingerprints are unique identifiers associated with alert
-                instances in Keep. Each provider declares the fields fingerprints
+                instances in Sampark. Each provider declares the fields fingerprints
                 are calculated based on.{" "}
                 <Link
                   href={`${

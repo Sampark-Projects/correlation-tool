@@ -559,7 +559,7 @@ const ProviderForm = ({
                     variant="simple"
                     color="gray"
                     size="sm"
-                    tooltip={`Whether to install Keep as a webhook integration in ${provider.type}. This allows Keep to asynchronously receive alerts from ${provider.type}. Please note that this will install a new integration in ${provider.type} and slightly modify your monitors/notification policy to include Keep.`}
+                    tooltip={`Whether to install Sampark as a webhook integration in ${provider.type}. This allows Sampark to asynchronously receive alerts from ${provider.type}. Please note that this will install a new integration in ${provider.type} and slightly modify your monitors/notification policy to include Sampark.`}
                   />
                 </label>
                 {provider.pulling_available && (
@@ -582,7 +582,7 @@ const ProviderForm = ({
                         variant="simple"
                         color="gray"
                         size="sm"
-                        tooltip={`Whether Keep should try to pull alerts automatically from the provider once in a while`}
+                        tooltip={`Whether Sampark should try to pull alerts automatically from the provider once in a while`}
                       />
                     </label>
                   </>
@@ -603,7 +603,7 @@ const ProviderForm = ({
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Webhook installation is disabled because Keep is running
+                      Webhook installation is disabled because Sampark is running
                       without an external URL.
                       <br />
                       <br />
@@ -639,7 +639,7 @@ const ProviderForm = ({
                     variant="simple"
                     color="gray"
                     size="sm"
-                    tooltip={`Whether Keep should try to pull alerts automatically from the provider once in a while`}
+                    tooltip={`Whether Sampark should try to pull alerts automatically from the provider once in a while`}
                   />
                 </label>
               </div>
@@ -665,7 +665,7 @@ const ProviderForm = ({
                   variant="simple"
                   color="gray"
                   size="sm"
-                  tooltip={`Whether Keep should try to pull alerts automatically from the provider once in a while`}
+                  tooltip={`Whether Sampark should try to pull alerts automatically from the provider once in a while`}
                 />
               </label>
             </div>

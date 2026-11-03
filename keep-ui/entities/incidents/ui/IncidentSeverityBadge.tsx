@@ -16,9 +16,20 @@ interface Props {
 
 export function IncidentSeverityBadge({ severity, size = "xs" }: Props) {
   const {icon, color} = getIncidentSeverityIconAndColor(severity);
+  // Tremor's "orange" is the brand green in this app; high severity keeps a real
+  // orange, which Tremor can only take as a hex (that would paint text and
+  // background the same color), so style the badge explicitly instead
+  const isHex = color.startsWith("#");
 
   return (
-    <Badge color={color} className="capitalize" size={size} icon={icon}>
+    <Badge
+      color={isHex ? "gray" : color}
+      className={`capitalize ${
+        isHex ? "!bg-[#ffedd5] !text-[#9a3412] !ring-[#fdba74]" : ""
+      }`}
+      size={size}
+      icon={icon}
+    >
       {capitalize(severity)}
     </Badge>
   );

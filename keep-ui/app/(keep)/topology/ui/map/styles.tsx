@@ -19,10 +19,10 @@ export const edgeMarkerEndNoHover = {
 export const edgeLabelBgStyleHover = {
   ...edgeLabelBgStyleNoHover,
   stroke: "none",
-  fill: "orange",
+  fill: "#1d6838",
   color: "white",
 };
 export const edgeMarkerEndHover = {
   ...edgeMarkerEndNoHover,
-  color: "orange",
+  color: "#1d6838",
 };

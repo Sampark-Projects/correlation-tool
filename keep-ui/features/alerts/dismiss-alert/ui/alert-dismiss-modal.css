@@ -22,12 +22,12 @@
 .react-datepicker__day--selected,
 .react-datepicker__day--keyboard-selected {
   border-radius: 25px !important;
-  background: orange !important;
+  background: #1d6838 !important;
   color: white !important;
 }
 
 .react-datepicker__time-list-item--selected {
-  background: orange !important;
+  background: #1d6838 !important;
   color: white !important;
 }
 

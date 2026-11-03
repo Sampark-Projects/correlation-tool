@@ -92,7 +92,7 @@ export function SeverityMappingFacet({
                     type="checkbox"
                     readOnly
                     checked={isChecked}
-                    style={{ accentColor: "#eb6221" }}
+                    style={{ accentColor: "#1d6838" }}
                     className="h-4 w-4 rounded border-gray-300 cursor-pointer"
                   />
                 </div>

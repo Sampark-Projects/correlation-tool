@@ -298,7 +298,7 @@ export function IncidentList({
           <Card className="mt-10 mb-10 flex-grow">
             <Title>Incident Predictions</Title>
             <Subtitle>
-              Possible problems predicted by Keep AI & Correlation Rules{" "}
+              Possible problems predicted by Sampark AI & Correlation Rules{" "}
               <Badge color="orange">Beta</Badge>
             </Subtitle>
             <PredictedIncidentsTable

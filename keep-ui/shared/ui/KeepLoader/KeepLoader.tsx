@@ -23,11 +23,11 @@ export function KeepLoader({
       {...props}
     >
       <Image
-        className="animate-bounce -my-10"
+        className="animate-bounce mb-4"
         src="/keep.svg"
         alt="loading"
-        width={200}
-        height={200}
+        width={72}
+        height={72}
       />
       <Title>{loadingText}</Title>
       {slowLoading && (

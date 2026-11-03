@@ -14,8 +14,8 @@ export default function MobileLanding() {
       >
         {/* Logo/Icon Section */}
         <Image
-          src="https://cdn.prod.website-files.com/66adeb018210ff2165886994/66adf6e44b8335a91b6f6b1d_image%201.png"
-          alt="Keep Logo"
+          src="/keep.png"
+          alt="Sampark Logo"
           width={128}
           height={128}
           priority

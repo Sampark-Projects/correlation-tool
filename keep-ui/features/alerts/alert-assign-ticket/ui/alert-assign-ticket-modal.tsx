@@ -170,7 +170,7 @@ export const AlertAssignTicketModal = ({
                 </label>
                 <Icon
                   icon={QuestionMarkCircleIcon}
-                  tooltip="Select a Ticketing provider from the list below, Keep will use the select provider and Ticket URL to enrich your alert."
+                  tooltip="Select a Ticketing provider from the list below, Sampark will use the select provider and Ticket URL to enrich your alert."
                   className="w-2 h-2 ml-2 z-[60]"
                 />
               </div>
