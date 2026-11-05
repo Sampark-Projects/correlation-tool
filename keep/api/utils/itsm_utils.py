@@ -259,11 +259,13 @@ def _build_ticket(alert: AlertDto) -> dict | None:
     description = str(alert.description or alert.message or "")[
         :MAX_DESCRIPTION_LENGTH
     ]
+    # same fallback Keep uses for an alert with no source
+    source = ", ".join(str(item) for item in alert.source or []) or "keep"
     details = {
         "Description": description,
         "Severity": severity,
         "Status": status,
-        "Source": ", ".join(str(source) for source in alert.source or []),
+        "Source": source,
         "Service": alert.service,
         "Environment": alert.environment,
         "Last received": alert.lastReceived,
@@ -286,7 +288,7 @@ def _build_ticket(alert: AlertDto) -> dict | None:
         "title": str(alert.name or "Keep alert")[:MAX_TITLE_LENGTH],
         "remarks": remarks,
         "attachments": None,
-        "referenceId": None,
+        "referenceId": source,
         "ticketSource": TICKET_SOURCE,
     }
 
