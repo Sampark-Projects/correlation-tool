@@ -288,8 +288,8 @@ def _build_ticket(alert: AlertDto) -> dict | None:
         "title": str(alert.name or "Keep alert")[:MAX_TITLE_LENGTH],
         "remarks": remarks,
         "attachments": None,
-        # the Keep alert UUID (the alert's "id" key)
-        "referenceId": alert.id,
+        # Keep's own alert UUID (alert.id can be set by the source, e.g. the alertname for Prometheus)
+        "referenceId": alert.event_id,
         "ticketSource": TICKET_SOURCE,
     }
 
