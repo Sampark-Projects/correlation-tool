@@ -9,11 +9,13 @@ import time
 import requests
 
 from keep.api.core.config import config
-from keep.api.models.alert import AlertDto, AlertStatus
+from keep.api.models.incident import IncidentDto
 
-# Sampark ITSM integration - every new firing alert Keep saves is opened as an ITSM ticket.
-# Tickets are sent from a background thread and every error is logged and swallowed,
-# so alert processing works exactly the same when the ITSM is down or not configured.
+# Sampark ITSM integration - every incident Keep creates (correlation rule, topology or
+# manual) is opened as an ITSM ticket, with the incident UUID as the referenceId.
+# Single alerts are not sent. Tickets are sent from a background thread and every error
+# is logged and swallowed, so incident processing works exactly the same when the ITSM
+# is down or not configured.
 
 logger = logging.getLogger(__name__)
 
@@ -38,14 +40,8 @@ ITSM_DEFAULT_SEVERITY_ID = config("ITSM_DEFAULT_SEVERITY_ID", default="SEV-4")
 # contact on the ticket, defaults to the logged in ITSM user
 ITSM_TICKET_EMAIL = config("ITSM_TICKET_EMAIL", default=None)
 ITSM_TICKET_MOBILE = config("ITSM_TICKET_MOBILE", default=None)
-# only alerts with these statuses open a ticket (not resolved, acknowledged, etc.)
-ITSM_ALERT_STATUSES = {
-    status.strip().lower()
-    for status in str(
-        config("ITSM_ALERT_STATUSES", default=AlertStatus.FIRING.value)
-    ).split(",")
-    if status.strip()
-}
+# Keep UI base url (e.g. https://alerts.samparkme.com), used to link the incident in the ticket
+ITSM_KEEP_UI_URL = config("ITSM_KEEP_UI_URL", default=None)
 try:
     ITSM_TIMEOUT = float(config("ITSM_TIMEOUT", default=15))
 except ValueError:
@@ -185,11 +181,11 @@ class _ItsmClient:
             timeout=ITSM_TIMEOUT,
         )
 
-    def create_ticket(self, ticket: dict, fingerprint: str | None):
+    def create_ticket(self, ticket: dict, incident_id: str | None):
         if not self._token and not self._login():
             logger.warning(
                 "Not logged in to ITSM, skipping ticket",
-                extra={"fingerprint": fingerprint},
+                extra={"incident_id": incident_id},
             )
             return
 
@@ -203,13 +199,13 @@ class _ItsmClient:
             ticket_no = (body.get("responseObject") or {}).get("ticketNo")
             logger.info(
                 f"Created ITSM ticket {ticket_no}",
-                extra={"fingerprint": fingerprint, "ticket_no": ticket_no},
+                extra={"incident_id": incident_id, "ticket_no": ticket_no},
             )
         else:
             logger.error(
                 "ITSM rejected the ticket",
                 extra={
-                    "fingerprint": fingerprint,
+                    "incident_id": incident_id,
                     "status_code": response.status_code,
                     "response": response.text[:500],
                 },
@@ -224,12 +220,12 @@ _tickets_queue_lock = threading.Lock()
 def _worker(tickets_queue: queue.Queue):
     client = _ItsmClient()
     while True:
-        fingerprint, ticket = tickets_queue.get()
+        incident_id, ticket = tickets_queue.get()
         try:
-            client.create_ticket(ticket, fingerprint)
+            client.create_ticket(ticket, incident_id)
         except Exception:
             logger.exception(
-                "Failed to create ITSM ticket", extra={"fingerprint": fingerprint}
+                "Failed to create ITSM ticket", extra={"incident_id": incident_id}
             )
 
 
@@ -250,28 +246,29 @@ def _get_tickets_queue() -> queue.Queue:
     return _tickets_queue
 
 
-def _build_ticket(alert: AlertDto) -> dict | None:
-    status = str(getattr(alert.status, "value", alert.status) or "").lower()
-    if status not in ITSM_ALERT_STATUSES:
-        return None
-
-    severity = str(getattr(alert.severity, "value", alert.severity) or "").lower()
-    description = str(alert.description or alert.message or "")[
+def _build_ticket(incident: IncidentDto) -> dict:
+    severity = str(getattr(incident.severity, "value", incident.severity) or "").lower()
+    status = str(getattr(incident.status, "value", incident.status) or "").lower()
+    name = incident.user_generated_name or incident.ai_generated_name or "Keep incident"
+    description = str(incident.user_summary or incident.generated_summary or "")[
         :MAX_DESCRIPTION_LENGTH
     ]
-    # same fallback Keep uses for an alert with no source
-    source = ", ".join(str(item) for item in alert.source or []) or "keep"
+    url = (
+        f"{ITSM_KEEP_UI_URL.rstrip('/')}/incidents/{incident.id}"
+        if ITSM_KEEP_UI_URL
+        else None
+    )
     details = {
         "Description": description,
         "Severity": severity,
         "Status": status,
-        "Source": source,
-        "Service": alert.service,
-        "Environment": alert.environment,
-        "Last received": alert.lastReceived,
-        "Fingerprint": alert.fingerprint,
-        "Keep alert id": alert.event_id,
-        "URL": alert.url,
+        "Alerts": incident.alerts_count,
+        "Sources": ", ".join(incident.alert_sources or []),
+        "Services": ", ".join(incident.services or []),
+        "Correlation rule": incident.rule_name,
+        "Started": incident.start_time,
+        "Keep incident id": incident.id,
+        "URL": url,
     }
     remarks = "".join(
         f"<p><b>{label}:</b> {html.escape(str(value))}</p>"
@@ -285,40 +282,42 @@ def _build_ticket(alert: AlertDto) -> dict | None:
         "categoryId": ITSM_CATEGORY_ID,
         "subCategoryId": ITSM_SUB_CATEGORY_ID,
         "severityId": ITSM_SEVERITY_MAP.get(severity, ITSM_DEFAULT_SEVERITY_ID),
-        "title": str(alert.name or "Keep alert")[:MAX_TITLE_LENGTH],
+        "title": str(name)[:MAX_TITLE_LENGTH],
         "remarks": remarks,
         "attachments": None,
-        # Keep's own alert UUID (alert.id can be set by the source, e.g. the alertname for Prometheus)
-        "referenceId": alert.event_id,
+        # Keep's incident UUID
+        "referenceId": str(incident.id),
         "ticketSource": TICKET_SOURCE,
     }
 
 
-def create_itsm_tickets(tenant_id: str, alerts: list[AlertDto]) -> None:
+def create_itsm_ticket_for_incident(tenant_id: str, incident: IncidentDto) -> None:
     """
-    Queue an ITSM ticket for every new alert Keep saved.
+    Queue an ITSM ticket for an incident Keep just created.
 
-    The tickets are created in the background and this function never raises.
+    The ticket is created in the background and this function never raises.
     """
-    if not ITSM_INTEGRATION_ENABLED or not alerts:
+    if not ITSM_INTEGRATION_ENABLED or incident is None:
         return
 
     if not (ITSM_LOGIN_EMAIL and ITSM_LOGIN_PASSWORD):
-        logger.debug("ITSM credentials are not set, skipping ITSM tickets")
+        logger.debug("ITSM credentials are not set, skipping ITSM ticket")
         return
 
     try:
-        tickets_queue = _get_tickets_queue()
-        for alert in alerts:
-            ticket = _build_ticket(alert)
-            if ticket is None:
-                continue
-            try:
-                tickets_queue.put_nowait((alert.fingerprint, ticket))
-            except queue.Full:
-                logger.warning(
-                    "ITSM ticket queue is full, dropping ticket",
-                    extra={"tenant_id": tenant_id, "fingerprint": alert.fingerprint},
-                )
+        # AI suggestions that nobody confirmed yet are not real incidents
+        if incident.is_candidate or not incident.is_visible:
+            return
+        ticket = _build_ticket(incident)
+        try:
+            _get_tickets_queue().put_nowait((str(incident.id), ticket))
+        except queue.Full:
+            logger.warning(
+                "ITSM ticket queue is full, dropping ticket",
+                extra={"tenant_id": tenant_id, "incident_id": str(incident.id)},
+            )
     except Exception:
-        logger.exception("Failed to queue ITSM tickets", extra={"tenant_id": tenant_id})
+        logger.exception(
+            "Failed to queue ITSM ticket",
+            extra={"tenant_id": tenant_id, "incident_id": str(incident.id)},
+        )

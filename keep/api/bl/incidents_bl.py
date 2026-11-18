@@ -36,6 +36,7 @@ from keep.api.models.action_type import ActionType
 from keep.api.models.db.incident import Incident, IncidentSeverity, IncidentStatus
 from keep.api.models.db.rule import ResolveOn
 from keep.api.models.incident import IncidentDto, IncidentDtoIn, IncidentSorting
+from keep.api.utils.itsm_utils import create_itsm_ticket_for_incident
 from keep.api.utils.enrichment_helpers import convert_db_alerts_to_dto_alerts
 from keep.api.utils.pagination import IncidentsPaginatedResultsDto
 from keep.identitymanager.authenticatedentity import AuthenticatedEntity
@@ -220,6 +221,9 @@ class IncidentBl:
                 "Failed to run workflows based on incident",
                 extra={"incident_id": incident_dto.id, "tenant_id": self.tenant_id},
             )
+        if action == "created":
+            # open an ITSM ticket for the new incident (sent in the background, never raises)
+            create_itsm_ticket_for_incident(self.tenant_id, incident_dto)
 
     async def __generate_summary(self, incident_id: UUID, incident: Incident):
         try:
